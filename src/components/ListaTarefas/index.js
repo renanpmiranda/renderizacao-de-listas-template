@@ -13,14 +13,25 @@ import bin from "../../assets/bin.png";
 export function ListaTarefas() {
   const [novaTarefa, setNovaTarefa] = useState("");
 
-
+  const [lista, setLista] = useState([
+    "Lavar a louça",
+    "Consertar a bike",
+    "Passar no mercado",
+  ])
+ 
   const onChangeTarefa = (event) => {
     setNovaTarefa(event.target.value);
   };
 
-  const adicionaTarefa = () => {};
+  const adicionaTarefa = () => {
+    setLista([...lista, novaTarefa])
+    setNovaTarefa("")
+  };
 
-  const removeTarefa = () => {};
+  const removeTarefa = (tarefa) => {
+    const listaFiltrada = lista.filter((item) => tarefa !== item)
+    setLista(listaFiltrada)    
+  };
 
   return (
     <ListaTarefasContainer>
@@ -30,17 +41,21 @@ export function ListaTarefas() {
           value={novaTarefa}
           onChange={onChangeTarefa}
         />
-        <AddTaskButton>Adicionar</AddTaskButton>
+        <AddTaskButton onClick={adicionaTarefa}>Adicionar</AddTaskButton>
       </InputContainer>
 
       <ListaContainer>
         <ul>
-          <Tarefa>
-            <p>Nova tarefa</p>
-            <RemoveButton>
-              <img src={bin} alt="" width="16px" />
-            </RemoveButton>
-          </Tarefa>
+          {lista.map((tarefa, index) => {
+            return (
+              <Tarefa key={index}>
+              <p>{tarefa}</p>
+              <RemoveButton onClick={() => removeTarefa(tarefa)}>
+                <img src={bin} alt="bin" width="16px" />
+              </RemoveButton>
+              </Tarefa>
+            )
+          })}
         </ul>
       </ListaContainer>
     </ListaTarefasContainer>
